@@ -12,8 +12,13 @@ class AProjectXSPGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(EditAnywhere)
-   	int32 desiredHeight = 360;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+   	int32 DesiredHeight = 360;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool RayTracingEnabled = false;
 
 public:
 	AProjectXSPGameMode();

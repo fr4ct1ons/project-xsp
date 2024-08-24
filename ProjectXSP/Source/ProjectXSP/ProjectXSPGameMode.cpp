@@ -16,9 +16,15 @@ AProjectXSPGameMode::AProjectXSPGameMode()
 float AProjectXSPGameMode::GetScreenPercentage() const
 {
 	FVector2D Result = FVector2D( 1, 1 );
-
 	float currentRes = GSystemResolution.ResY;
-	float multiplier = currentRes / static_cast<float>(desiredHeight);
+	float multiplier = 1.0f;
+
+	if(RayTracingEnabled)
+	{
+		return 75.0f;
+	}
+	
+	multiplier = currentRes / static_cast<float>(DesiredHeight);
 
 	return (1/multiplier) * 100.0f;
 }
