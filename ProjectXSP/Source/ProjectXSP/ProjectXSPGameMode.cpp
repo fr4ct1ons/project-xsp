@@ -31,6 +31,7 @@ void AProjectXSPGameMode::SwapPlayerWorld()
 	FVector playerLocation = Player->GetActorLocation();
 	Player->SetActorLocation(OthersidePreview->GetActorLocation());
 	OthersidePreview->SetActorLocation(playerLocation);
+	OthersidePreview->Swapped = !OthersidePreview->Swapped;
 }
 
 float AProjectXSPGameMode::GetScreenPercentage() const

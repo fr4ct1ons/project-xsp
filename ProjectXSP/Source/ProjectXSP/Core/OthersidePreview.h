@@ -47,4 +47,7 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	const bool IsBlocked();
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool Swapped = false;
 };

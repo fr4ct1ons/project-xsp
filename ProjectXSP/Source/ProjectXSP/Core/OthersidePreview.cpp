@@ -35,7 +35,7 @@ void AOthersidePreview::Tick(float DeltaTime)
 
 	if(Player != nullptr)
 	{
-		SetActorLocation(Player->GetActorLocation() + Offset);
+		SetActorLocation(Player->GetActorLocation() + (Swapped ? -Offset : Offset));
 		SceneCapture->SetWorldRotation(Player->GetFirstPersonCameraComponent()->GetComponentRotation());
 	}
 	
