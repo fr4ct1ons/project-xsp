@@ -27,8 +27,9 @@ void AHeldInteractable::Tick(float DeltaTime)
 
 void AHeldInteractable::Interact()
 {
-
 	OnInteract();
+
+	
 }
 
 

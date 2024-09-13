@@ -2,6 +2,7 @@
 
 #include "ProjectXSPGameMode.h"
 #include "ProjectXSPCharacter.h"
+#include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 
 AProjectXSPGameMode::AProjectXSPGameMode()
@@ -11,6 +12,25 @@ AProjectXSPGameMode::AProjectXSPGameMode()
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/FirstPerson/Blueprints/BP_FirstPersonCharacter"));
 	DefaultPawnClass = PlayerPawnClassFinder.Class;
 
+}
+
+void AProjectXSPGameMode::BeginPlay()
+{
+	Player = static_cast<AProjectXSPCharacter*>(UGameplayStatics::GetActorOfClass(GetWorld(), AProjectXSPCharacter::StaticClass()));
+	OthersidePreview = static_cast<AOthersidePreview*>(UGameplayStatics::GetActorOfClass(GetWorld(), AOthersidePreview::StaticClass()));
+	Super::BeginPlay();
+}
+
+const bool AProjectXSPGameMode::CanTeleport()
+{
+	return !OthersidePreview->IsBlocked();
+}
+
+void AProjectXSPGameMode::SwapPlayerWorld()
+{
+	FVector playerLocation = Player->GetActorLocation();
+	Player->SetActorLocation(OthersidePreview->GetActorLocation());
+	OthersidePreview->SetActorLocation(playerLocation);
 }
 
 float AProjectXSPGameMode::GetScreenPercentage() const
