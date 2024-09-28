@@ -18,4 +18,21 @@ protected:
 	virtual void Interact() override;
 
 	bool TryGetPlayerHolder(AProjectXSPCharacter* OutPlayer);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float Range = 10000.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int MagazineCapacity = 7;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int CarriedAmmoCapacity = 35;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int CurrentMagazine = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int CurrentCarriedAmmo = 0;
+
+	virtual void BeginPlay();
 };

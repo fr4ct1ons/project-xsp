@@ -45,3 +45,14 @@ void AHeldInteractable::SetHolder(AActor* holder, FName socket)
 	Holder = holder;
 }
 
+void AHeldInteractable::SetHolder(AActor* holder, USceneComponent* holderComponent)
+{
+	if(IsValid(holder))
+	{
+		Holder = holder;
+		HolderComponent = holderComponent;
+		AttachToComponent(HolderComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	}
+}
+
+

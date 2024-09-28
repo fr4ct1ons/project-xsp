@@ -21,7 +21,10 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	AActor* Holder;
+	UPROPERTY(BlueprintReadOnly)
 	FName HolderSocket;
+	UPROPERTY(BlueprintReadOnly)
+	USceneComponent* HolderComponent;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnInteract();
@@ -33,5 +36,6 @@ public:
 	virtual void Interact();
 
 	virtual void SetHolder(AActor* holder, FName socket);
+	virtual void SetHolder(AActor* holder, USceneComponent* holderComponent);
 
 };

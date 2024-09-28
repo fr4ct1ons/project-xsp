@@ -27,6 +27,9 @@ AProjectXSPCharacter::AProjectXSPCharacter()
 	FirstPersonCameraComponent->SetRelativeLocation(FVector(-10.f, 0.f, 60.f)); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
+	Hand = CreateDefaultSubobject<USceneComponent>(TEXT("Hand"));
+	Hand->SetupAttachment(FirstPersonCameraComponent);
+
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
 	Mesh1P->SetOnlyOwnerSee(true);
@@ -42,6 +45,21 @@ void AProjectXSPCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	bool DefaultSet = false;
+	for (TSubclassOf<AHeldInteractable> def : DefaultInteractables)
+	{
+		auto temp = GetWorld()->SpawnActor(def);
+		auto interactable = static_cast<AHeldInteractable*>(temp);
+		interactable->SetHolder(this, Hand);
+		interactable->SetActorRelativeLocation(FVector::ZeroVector);
+		CurrentInteractables.Add(interactable);
+		if(!DefaultSet)
+		{
+			CurrentInteractable = interactable;
+			DefaultSet = true;
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
@@ -60,6 +78,8 @@ void AProjectXSPCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AProjectXSPCharacter::Look);
+
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &AProjectXSPCharacter::Fire);
 	}
 	else
 	{
@@ -91,5 +111,14 @@ void AProjectXSPCharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void AProjectXSPCharacter::Fire(const FInputActionValue& Value)
+{
+	if(IsValid(CurrentInteractable))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, "Fire");
+		CurrentInteractable->Interact();
 	}
 }

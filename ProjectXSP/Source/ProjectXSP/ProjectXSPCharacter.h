@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Combat/HeldInteractable.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "ProjectXSPCharacter.generated.h"
@@ -36,6 +37,10 @@ class AProjectXSPCharacter : public ACharacter
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	UInputAction* MoveAction;
+
+	/** Move Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	UInputAction* FireAction;
 	
 public:
 	AProjectXSPCharacter();
@@ -56,13 +61,25 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
-protected:
+	void Fire(const FInputActionValue& Value);
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 	// End of APawn interface
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool IsTeleporting = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TArray<TSubclassOf<AHeldInteractable>> DefaultInteractables = TArray<TSubclassOf<AHeldInteractable>>();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<AHeldInteractable*> CurrentInteractables = TArray<AHeldInteractable*>();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	USceneComponent* Hand;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	AHeldInteractable* CurrentInteractable;
 
 public:
 	/** Returns Mesh1P subobject **/

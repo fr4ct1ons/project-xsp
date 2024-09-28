@@ -19,20 +19,22 @@ void AModularHitscanWeapon::Interact()
 		if(outPlayer != nullptr)
 		{
 			OriginPoint = outPlayer->GetFirstPersonCameraComponent()->GetComponentLocation();
-			EndPoint = outPlayer->GetFirstPersonCameraComponent()->GetComponentLocation() + outPlayer->GetFirstPersonCameraComponent()->GetForwardVector();
+			EndPoint = outPlayer->GetFirstPersonCameraComponent()->GetComponentLocation() +
+				(outPlayer->GetFirstPersonCameraComponent()->GetForwardVector() * Range);
 		}
 		else
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "Failed to get player.");
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "Error getting player.");
+			return;
 		}
 	}
 	else
 	{
 		OriginPoint = GetActorLocation();
-		EndPoint = GetActorLocation() + GetActorForwardVector();
+		EndPoint = GetActorLocation() + (GetActorForwardVector() * Range);
 	}
 	
-	GetWorld()->LineTraceSingleByChannel(HitResult, OriginPoint, EndPoint, ECC_Visibility );
+	GetWorld()->LineTraceSingleByChannel(HitResult, OriginPoint, EndPoint * Range, ECC_Visibility );
 	if(HitResult.bBlockingHit)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, "Hit Point:" + HitResult.GetActor()->GetName());
@@ -57,4 +59,11 @@ bool AModularHitscanWeapon::TryGetPlayerHolder(AProjectXSPCharacter* OutPlayer)
 	return true;
 }
 
+void AModularHitscanWeapon::BeginPlay()
+{
+	Super::BeginPlay();
+
+	CurrentMagazine = MagazineCapacity;
+	CurrentCarriedAmmo = CarriedAmmoCapacity;
+}
 
