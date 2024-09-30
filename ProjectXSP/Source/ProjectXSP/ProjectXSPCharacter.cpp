@@ -87,7 +87,6 @@ void AProjectXSPCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	}
 }
 
-
 void AProjectXSPCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
@@ -118,7 +117,6 @@ void AProjectXSPCharacter::Fire(const FInputActionValue& Value)
 {
 	if(IsValid(CurrentInteractable))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, "Fire");
 		CurrentInteractable->Interact();
 	}
 }

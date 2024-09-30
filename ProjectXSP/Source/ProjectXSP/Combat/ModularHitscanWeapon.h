@@ -17,7 +17,7 @@ class PROJECTXSP_API AModularHitscanWeapon : public AHeldInteractable
 protected:
 	virtual void Interact() override;
 
-	bool TryGetPlayerHolder(AProjectXSPCharacter* OutPlayer);
+	bool TryGetPlayerHolder(AProjectXSPCharacter*& OutPlayer);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float Range = 10000.f;
@@ -35,4 +35,11 @@ protected:
 	int CurrentCarriedAmmo = 0;
 
 	virtual void BeginPlay();
+
+public:
+	const bool CanShoot();
+
+	const bool CanReload();
+
+	bool TryReload();
 };

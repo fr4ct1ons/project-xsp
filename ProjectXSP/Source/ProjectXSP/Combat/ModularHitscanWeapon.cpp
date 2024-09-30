@@ -7,6 +7,15 @@
 
 void AModularHitscanWeapon::Interact()
 {
+	if(!CanShoot())
+	{
+		if(!TryReload())
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "Not Reloading.");
+			return;
+		}
+	}
+	
 	FHitResult HitResult;
 	
 	AProjectXSPCharacter* outPlayer = nullptr;
@@ -35,17 +44,29 @@ void AModularHitscanWeapon::Interact()
 	}
 	
 	GetWorld()->LineTraceSingleByChannel(HitResult, OriginPoint, EndPoint * Range, ECC_Visibility );
+	
+	CurrentMagazine--;
+	if(!CanShoot())
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, "Magazine is empty. Reloading...");
+		if(!TryReload())
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "Last bullet was fired!");
+			return;
+		}
+	}
+	
 	if(HitResult.bBlockingHit)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, "Hit Point:" + HitResult.GetActor()->GetName());
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, "Hit Point:" + HitResult.GetActor()->GetName());
 	}
 
 	Super::Interact();
 }
 
-bool AModularHitscanWeapon::TryGetPlayerHolder(AProjectXSPCharacter* OutPlayer)
+bool AModularHitscanWeapon::TryGetPlayerHolder(AProjectXSPCharacter*& OutPlayer)
 {
-	OutPlayer = Cast<AProjectXSPCharacter>(Holder);
+	OutPlayer = static_cast<AProjectXSPCharacter*>(Holder);
 
 	
 	if(OutPlayer == nullptr)
@@ -53,9 +74,7 @@ bool AModularHitscanWeapon::TryGetPlayerHolder(AProjectXSPCharacter* OutPlayer)
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Failure getting player!");
 		return false;
 	}
-
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Got player!");
-
+	
 	return true;
 }
 
@@ -67,3 +86,45 @@ void AModularHitscanWeapon::BeginPlay()
 	CurrentCarriedAmmo = CarriedAmmoCapacity;
 }
 
+const bool AModularHitscanWeapon::CanShoot()
+{
+	if(CurrentMagazine <= 0 && MagazineCapacity > 0) 
+	{
+		return false;
+	}
+
+	return true;
+	
+}
+
+const bool AModularHitscanWeapon::CanReload()
+{
+	return CurrentMagazine < MagazineCapacity;
+}
+
+bool AModularHitscanWeapon::TryReload()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, "Reloading...");
+	
+	if(CarriedAmmoCapacity <= 0)
+	{
+		CurrentMagazine = MagazineCapacity;
+		return true;
+	}
+	
+	if(CurrentCarriedAmmo <= 0)
+	{
+		return false;
+	}
+	
+	int overDrawn = 0;
+	CurrentCarriedAmmo -= MagazineCapacity;
+	if(CurrentCarriedAmmo < 0) //Ammo was overdrawn
+	{
+		overDrawn =  FMath::Abs(CurrentCarriedAmmo);
+		CurrentCarriedAmmo = 0;
+	}
+	CurrentMagazine = MagazineCapacity - overDrawn;
+
+	return true;
+}
