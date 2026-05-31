@@ -30,6 +30,7 @@ AProjectXSPCharacter::AProjectXSPCharacter()
 	Hand = CreateDefaultSubobject<USceneComponent>(TEXT("Hand"));
 	Hand->SetupAttachment(FirstPersonCameraComponent);
 
+	/*
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
 	Mesh1P->SetOnlyOwnerSee(true);
@@ -38,6 +39,7 @@ AProjectXSPCharacter::AProjectXSPCharacter()
 	Mesh1P->CastShadow = false;
 	//Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
 	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
+	*/
 
 }
 
