@@ -61,11 +61,18 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	bool TryGetPlayerHolder(AProjectXSPCharacter*& OutPlayer);
 
+	UFUNCTION(BlueprintCallable)
+	void CompleteReload();
+
+	
+	FTimerHandle ReloadTimerHandle;
 
 public:
 	const bool CanShoot();
 
 	const bool CanReload();
 
-	bool TryReload();
+	bool TryInstantReload();
+
+	bool NeedsReload();
 };

@@ -9,11 +9,14 @@ void AModularHitscanWeapon::Interact()
 {
 	if(!CanShoot())
 	{
-		if(!TryReload())
+		return;
+		/*
+		if(!TryInstantReload())
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "Not Reloading.");
 			return;
 		}
+		*/
 	}
 	
 	FHitResult HitResult;
@@ -56,16 +59,15 @@ void AModularHitscanWeapon::Interact()
 	}
 
 	OnShoot.Broadcast();
-	
 	CurrentMagazine--;
-	if (false) //(!CanShoot())
+	
+	if (NeedsReload())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, "Magazine is empty. Reloading...");
-		if(!TryReload())
+		GetWorldTimerManager().SetTimer(ReloadTimerHandle, FTimerDelegate::CreateWeakLambda(this, [this]()
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "Last bullet was fired!");
-			return;
-		}
+			OnReloadStart.Broadcast();
+		}), 0.1f, false);
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, "Reload is needed - Bullets left:" + CurrentCarriedAmmo);
 	}
 	
 	if(HitResult.bBlockingHit)
@@ -119,7 +121,7 @@ const bool AModularHitscanWeapon::CanReload()
 	return CurrentMagazine < MagazineCapacity;
 }
 
-bool AModularHitscanWeapon::TryReload()
+bool AModularHitscanWeapon::TryInstantReload()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, "Reloading...");
 	
@@ -144,4 +146,28 @@ bool AModularHitscanWeapon::TryReload()
 	CurrentMagazine = MagazineCapacity - overDrawn;
 
 	return true;
+}
+
+void AModularHitscanWeapon::CompleteReload()
+{
+	int overDrawn = 0;
+	CurrentCarriedAmmo -= MagazineCapacity;
+	if(CurrentCarriedAmmo < 0) //Ammo was overdrawn
+	{
+		overDrawn =  FMath::Abs(CurrentCarriedAmmo);
+		CurrentCarriedAmmo = 0;
+	}
+	CurrentMagazine = MagazineCapacity - overDrawn;
+
+	OnReloadComplete.Broadcast();
+}
+
+bool AModularHitscanWeapon::NeedsReload()
+{
+	if(CurrentMagazine <= 0) 
+	{
+		return true;
+	}
+
+	return false;
 }
