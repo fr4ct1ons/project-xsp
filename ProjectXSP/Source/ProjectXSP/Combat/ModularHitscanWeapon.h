@@ -7,6 +7,8 @@
 #include "ProjectXSP/ProjectXSPCharacter.h"
 #include "ModularHitscanWeapon.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBaseDelegate);
+
 /**
  * 
  */
@@ -16,8 +18,6 @@ class PROJECTXSP_API AModularHitscanWeapon : public AHeldInteractable
 	GENERATED_BODY()
 protected:
 	virtual void Interact() override;
-
-	bool TryGetPlayerHolder(AProjectXSPCharacter*& OutPlayer);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float Range = 10000.f;
@@ -34,7 +34,33 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int CurrentCarriedAmmo = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ShootingCooldown = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsFullAuto = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsCoolingDown = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsReloading = false;
+
 	virtual void BeginPlay();
+
+	UPROPERTY(BlueprintAssignable)
+	FBaseDelegate OnShoot;
+
+	UPROPERTY(BlueprintAssignable)
+	FBaseDelegate OnReloadStart;
+
+	UPROPERTY(BlueprintAssignable)
+	FBaseDelegate OnReloadComplete;
+	
+
+	UFUNCTION(BlueprintCallable)
+	bool TryGetPlayerHolder(AProjectXSPCharacter*& OutPlayer);
+
 
 public:
 	const bool CanShoot();

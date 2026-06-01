@@ -44,9 +44,21 @@ void AModularHitscanWeapon::Interact()
 	}
 	
 	GetWorld()->LineTraceSingleByChannel(HitResult, OriginPoint, EndPoint * Range, ECC_Visibility );
+
+	if (FMath::IsNearlyZero(ShootingCooldown))
+	{
+		FTimerHandle TimerHandle;
+		IsCoolingDown = true;
+		GetWorldTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateWeakLambda(this, [this]()
+		{
+			IsCoolingDown = false;
+		}), ShootingCooldown, false);
+	}
+
+	OnShoot.Broadcast();
 	
 	CurrentMagazine--;
-	if(!CanShoot())
+	if (false) //(!CanShoot())
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, "Magazine is empty. Reloading...");
 		if(!TryReload())
@@ -88,6 +100,11 @@ void AModularHitscanWeapon::BeginPlay()
 
 const bool AModularHitscanWeapon::CanShoot()
 {
+	if (IsCoolingDown || IsReloading)
+	{
+		return false;
+	}
+	
 	if(CurrentMagazine <= 0 && MagazineCapacity > 0) 
 	{
 		return false;

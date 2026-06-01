@@ -22,12 +22,6 @@ class AProjectXSPCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-	/** Pawn mesh: 1st person view (arms; seen only by self) */
-	/*
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Mesh, meta = (AllowPrivateAccess = "true"))
-	USkeletalMeshComponent* Mesh1P;
-	*/
-
 	/** First person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FirstPersonCameraComponent;
@@ -77,8 +71,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<AHeldInteractable*> CurrentInteractables = TArray<AHeldInteractable*>();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	USceneComponent* Hand;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	USceneComponent* HandR;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	AHeldInteractable* CurrentInteractable;
