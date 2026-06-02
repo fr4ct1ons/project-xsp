@@ -58,8 +58,8 @@ void AModularHitscanWeapon::Interact()
 		}), ShootingCooldown, false);
 	}
 
-	OnShoot.Broadcast();
 	CurrentMagazine--;
+	OnShoot.Broadcast();
 	
 	if (NeedsReload())
 	{
