@@ -7,9 +7,13 @@
 #include "Core/OthersidePreview.h"
 #include "GameFramework/GameModeBase.h"
 #include "ProjectXSPCharacter.h"
+#include "Components/TimelineComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
+#include "CommonDelegates.h"
 #include "ProjectXSPGameMode.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FTransitionEffectUpdate, float, Strength, float, RawStrength, bool, IsNewToOld);
 
 UCLASS(minimalapi)
 class AProjectXSPGameMode : public AGameModeBase
@@ -23,10 +27,13 @@ protected:
 	virtual void BeginPlay() override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-   	int32 DesiredHeight = 360;
+	int32 DesiredHeight = 360;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool RayTracingEnabled = false;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	bool IsNewWorld = true;
 
 	UPROPERTY(BlueprintReadWrite)
 	AActor* CornerA; //To be set in blueprint.
@@ -46,14 +53,29 @@ protected:
 	UFUNCTION(BlueprintPure)
 	const bool CanTeleport();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartSwap();
+
 public:
 	AProjectXSPGameMode();
 	
 	UFUNCTION(BlueprintCallable)
-    float GetScreenPercentage() const;
+	float GetScreenPercentage() const;
 
 	UFUNCTION(BlueprintCallable)
 	void SwapPlayerWorld();
+
+	UFUNCTION(BlueprintCallable)
+	void RequestSwapAnimation();
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FTransitionEffectUpdate OnTransitionEffectUpdate;
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FBaseDelegate OnTransitionStarted;
+	
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FBaseDelegate OnTransitionCompleted;
 };
 
 

@@ -5,9 +5,8 @@
 #include "CoreMinimal.h"
 #include "HeldInteractable.h"
 #include "ProjectXSP/ProjectXSPCharacter.h"
+#include "../CommonDelegates.h"
 #include "ModularHitscanWeapon.generated.h"
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBaseDelegate);
 
 /**
  * 
