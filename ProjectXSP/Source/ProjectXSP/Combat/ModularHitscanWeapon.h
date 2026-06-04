@@ -76,4 +76,5 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool NeedsReload();
+	void TryReload();
 };

@@ -63,10 +63,7 @@ void AModularHitscanWeapon::Interact()
 	
 	if (NeedsReload())
 	{
-		GetWorldTimerManager().SetTimer(ReloadTimerHandle, FTimerDelegate::CreateWeakLambda(this, [this]()
-		{
-			OnReloadStart.Broadcast();
-		}), 0.1f, false);
+		TryReload();
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, "Reload is needed - Bullets left:" + CurrentCarriedAmmo);
 	}
 	
@@ -170,4 +167,17 @@ bool AModularHitscanWeapon::NeedsReload()
 	}
 
 	return false;
+}
+
+void AModularHitscanWeapon::TryReload()
+{
+	if (CurrentMagazine >= MagazineCapacity || CurrentCarriedAmmo <= 0)
+	{
+		return;
+	}
+	
+	GetWorldTimerManager().SetTimer(ReloadTimerHandle, FTimerDelegate::CreateWeakLambda(this, [this]()
+	{
+		OnReloadStart.Broadcast();
+	}), 0.1f, false);
 }

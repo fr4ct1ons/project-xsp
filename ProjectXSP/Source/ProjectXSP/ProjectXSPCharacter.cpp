@@ -9,6 +9,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Combat/ModularHitscanWeapon.h"
 #include "Engine/LocalPlayer.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -71,6 +72,7 @@ void AProjectXSPCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AProjectXSPCharacter::Look);
 
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &AProjectXSPCharacter::Fire);
+		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &AProjectXSPCharacter::Reload);
 	}
 	else
 	{
@@ -109,5 +111,16 @@ void AProjectXSPCharacter::Fire(const FInputActionValue& Value)
 	if(IsValid(CurrentInteractable))
 	{
 		CurrentInteractable->Interact();
+	}
+}
+
+void AProjectXSPCharacter::Reload(const FInputActionValue& Value)
+{
+	if(IsValid(CurrentInteractable))
+	{
+		if (AModularHitscanWeapon* weapon = Cast<AModularHitscanWeapon>(CurrentInteractable))
+		{
+			weapon->TryReload();
+		}
 	}
 }

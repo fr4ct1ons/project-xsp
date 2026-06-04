@@ -37,6 +37,10 @@ class AProjectXSPCharacter : public ACharacter
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	UInputAction* FireAction;
+
+	/** Move Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	UInputAction* ReloadAction;
 	
 public:
 	AProjectXSPCharacter();
@@ -58,6 +62,8 @@ protected:
 	void Look(const FInputActionValue& Value);
 
 	void Fire(const FInputActionValue& Value);
+
+	void Reload(const FInputActionValue& Value);
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 	// End of APawn interface
