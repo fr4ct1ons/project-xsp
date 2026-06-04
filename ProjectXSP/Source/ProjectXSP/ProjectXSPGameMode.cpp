@@ -1,9 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "ProjectXSPGameMode.h"
-#include "ProjectXSPCharacter.h"
-#include "Kismet/GameplayStatics.h"
-#include "UObject/ConstructorHelpers.h"
 
 AProjectXSPGameMode::AProjectXSPGameMode()
 	: Super()

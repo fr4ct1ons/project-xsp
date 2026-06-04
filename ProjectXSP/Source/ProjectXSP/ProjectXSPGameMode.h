@@ -6,6 +6,9 @@
 #include "ProjectXSPCharacter.h"
 #include "Core/OthersidePreview.h"
 #include "GameFramework/GameModeBase.h"
+#include "ProjectXSPCharacter.h"
+#include "Kismet/GameplayStatics.h"
+#include "UObject/ConstructorHelpers.h"
 #include "ProjectXSPGameMode.generated.h"
 
 UCLASS(minimalapi)

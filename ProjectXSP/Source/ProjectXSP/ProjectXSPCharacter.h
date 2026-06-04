@@ -6,6 +6,14 @@
 #include "Combat/HeldInteractable.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "Animation/AnimInstance.h"
+#include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "InputActionValue.h"
+#include "Combat/ModularHitscanWeapon.h"
 #include "ProjectXSPCharacter.generated.h"
 
 class UInputComponent;
