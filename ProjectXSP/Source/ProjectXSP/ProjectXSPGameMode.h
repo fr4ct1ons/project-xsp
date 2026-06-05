@@ -36,22 +36,22 @@ protected:
 	bool IsNewWorld = true;
 
 	UPROPERTY(BlueprintReadWrite)
-	AActor* CornerA; //To be set in blueprint.
+	TObjectPtr<AActor> CornerA; //To be set in blueprint.
 	
 	UPROPERTY(BlueprintReadWrite)
-	AActor* CornerB; //To be set in blueprint.
+	TObjectPtr<AActor> CornerB; //To be set in blueprint.
 
 	UPROPERTY(BlueprintReadWrite)
 	FVector OffsetVector; //To be set in blueprint.
 
 	UPROPERTY(BlueprintReadOnly)
-	AProjectXSPCharacter* Player;
+	TObjectPtr<AProjectXSPCharacter> Player;
 	
 	UPROPERTY(BlueprintReadOnly)
-	AOthersidePreview* OthersidePreview;
+	TObjectPtr<AOthersidePreview> OthersidePreview;
 
 	UFUNCTION(BlueprintPure)
-	const bool CanTeleport();
+	bool CanTeleport() const;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void StartSwap();

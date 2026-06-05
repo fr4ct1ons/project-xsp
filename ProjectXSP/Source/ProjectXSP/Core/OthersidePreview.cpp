@@ -61,7 +61,7 @@ void AOthersidePreview::Populate(AProjectXSPCharacter* newPlayer, FVector newLoc
 	
 }
 
-const bool AOthersidePreview::IsBlocked()
+bool AOthersidePreview::IsBlocked() const
 {
 	return Blocked;
 }

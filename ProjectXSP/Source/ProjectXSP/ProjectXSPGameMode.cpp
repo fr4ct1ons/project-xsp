@@ -17,7 +17,7 @@ void AProjectXSPGameMode::BeginPlay()
 	Super::BeginPlay();
 }
 
-const bool AProjectXSPGameMode::CanTeleport()
+bool AProjectXSPGameMode::CanTeleport() const
 {
 	return !OthersidePreview->IsBlocked();
 }

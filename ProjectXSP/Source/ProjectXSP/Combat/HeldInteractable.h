@@ -20,11 +20,11 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintReadOnly)
-	AActor* Holder;
+	TObjectPtr<AActor> Holder;
 	UPROPERTY(BlueprintReadOnly)
 	FName HolderSocket;
 	UPROPERTY(BlueprintReadOnly)
-	USceneComponent* HolderComponent;
+	TObjectPtr<USceneComponent> HolderComponent;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnInteract();
@@ -33,9 +33,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual void Interact();
 
-	virtual void SetHolder(AActor* holder, FName socket);
-	virtual void SetHolder(AActor* holder, USceneComponent* holderComponent);
+	virtual void SetHolder(TObjectPtr<AActor> holder, FName socket);
+	virtual void SetHolder(TObjectPtr<AActor> holder, TObjectPtr<USceneComponent> holderComponent);
 
 };

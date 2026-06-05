@@ -25,13 +25,13 @@ protected:
 	FVector Offset = FVector::ZeroVector;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	UCapsuleComponent* Collider;
+	TObjectPtr<UCapsuleComponent> Collider;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	USceneCaptureComponent2D* SceneCapture;
+	TObjectPtr<USceneCaptureComponent2D> SceneCapture;
 
 	UPROPERTY(BlueprintReadWrite)
-	AProjectXSPCharacter* Player;
+	TObjectPtr<AProjectXSPCharacter> Player;
 
 	UPROPERTY(BlueprintReadOnly)
 	bool Blocked;
@@ -46,7 +46,7 @@ public:
 	void Populate(AProjectXSPCharacter* newPlayer, FVector newLocation, FVector newOffset);
 
 	UFUNCTION(BlueprintPure)
-	const bool IsBlocked();
+	bool IsBlocked() const;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool Swapped = false;

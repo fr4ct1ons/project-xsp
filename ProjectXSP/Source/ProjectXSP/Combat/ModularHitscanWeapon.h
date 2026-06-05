@@ -22,16 +22,16 @@ protected:
 	float Range = 10000.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	int MagazineCapacity = 7;
+	int32 MagazineCapacity = 7;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	int CarriedAmmoCapacity = 35;
+	int32 CarriedAmmoCapacity = 35;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int CurrentMagazine = 0;
+	int32 CurrentMagazine = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int CurrentCarriedAmmo = 0;
+	int32 CurrentCarriedAmmo = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float ShootingCooldown = 0.0f;
@@ -67,10 +67,13 @@ protected:
 	FTimerHandle ReloadTimerHandle;
 
 public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	const bool CanShoot();
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	const bool CanReload();
 
+	UFUNCTION(BlueprintCallable)
 	bool TryInstantReload();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)

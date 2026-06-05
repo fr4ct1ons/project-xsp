@@ -33,23 +33,23 @@ class AProjectXSPCharacter : public ACharacter
 
 	/** First person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* FirstPersonCameraComponent;
+	TObjectPtr<UCameraComponent> FirstPersonCameraComponent;
 
 	/** Jump Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* JumpAction;
+	TObjectPtr<UInputAction> JumpAction;
 
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* MoveAction;
+	TObjectPtr<UInputAction> MoveAction;
 
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* FireAction;
+	TObjectPtr<UInputAction> FireAction;
 
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* ReloadAction;
+	TObjectPtr<UInputAction> ReloadAction;
 	
 public:
 	AProjectXSPCharacter();
@@ -87,10 +87,10 @@ protected:
 	TArray<AHeldInteractable*> CurrentInteractables = TArray<AHeldInteractable*>();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	USceneComponent* HandR;
+	TObjectPtr<USceneComponent> HandR;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	AHeldInteractable* CurrentInteractable;
+	TObjectPtr<AHeldInteractable> CurrentInteractable;
 
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FIntDelegate OnUpdateCurrentMag;
@@ -100,7 +100,7 @@ protected:
 
 public:
 	/** Returns FirstPersonCameraComponent subobject **/
-	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+	TObjectPtr<UCameraComponent> GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	void GetAmmo(int32& OutCurrentMag, int32& OutCarriedAmmo);

@@ -33,7 +33,7 @@ void AHeldInteractable::Interact()
 }
 
 
-void AHeldInteractable::SetHolder(AActor* holder, FName socket)
+void AHeldInteractable::SetHolder(TObjectPtr<AActor> holder, FName socket)
 {
 	if(IsValid(holder))
 	{
@@ -45,7 +45,7 @@ void AHeldInteractable::SetHolder(AActor* holder, FName socket)
 	Holder = holder;
 }
 
-void AHeldInteractable::SetHolder(AActor* holder, USceneComponent* holderComponent)
+void AHeldInteractable::SetHolder(TObjectPtr<AActor> holder, TObjectPtr<USceneComponent> holderComponent)
 {
 	if(IsValid(holder))
 	{
