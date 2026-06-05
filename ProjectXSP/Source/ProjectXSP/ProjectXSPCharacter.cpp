@@ -70,6 +70,16 @@ void AProjectXSPCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	}
 }
 
+void AProjectXSPCharacter::GetAmmo(int32& OutCurrentMag, int32& OutCarriedAmmo)
+{
+	TObjectPtr<AModularHitscanWeapon> weapon = Cast<AModularHitscanWeapon>(CurrentInteractable);
+	if (IsValid(weapon))
+	{
+		OutCurrentMag = weapon->GetCurrentMag();
+		OutCarriedAmmo = weapon->GetCarriedAmmo();
+	}
+}
+
 void AProjectXSPCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D

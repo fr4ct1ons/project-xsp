@@ -76,4 +76,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool NeedsReload();
 	void TryReload();
+
+	UFUNCTION()
+	int32 GetCarriedAmmo() const {return CurrentCarriedAmmo;}
+	int32 GetCurrentMag() const {return CurrentMagazine;}
 };

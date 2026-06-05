@@ -148,7 +148,9 @@ bool AModularHitscanWeapon::TryInstantReload()
 void AModularHitscanWeapon::CompleteReload()
 {
 	int overDrawn = 0;
-	CurrentCarriedAmmo -= MagazineCapacity;
+	int requiredBullets = MagazineCapacity - CurrentMagazine;
+	CurrentCarriedAmmo -= requiredBullets;
+	
 	if(CurrentCarriedAmmo < 0) //Ammo was overdrawn
 	{
 		overDrawn =  FMath::Abs(CurrentCarriedAmmo);

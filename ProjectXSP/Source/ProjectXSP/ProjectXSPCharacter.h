@@ -13,6 +13,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "CommonDelegates.h"
 #include "Combat/ModularHitscanWeapon.h"
 #include "ProjectXSPCharacter.generated.h"
 
@@ -91,9 +92,17 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	AHeldInteractable* CurrentInteractable;
 
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FIntDelegate OnUpdateCurrentMag;
+	
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FIntDelegate OnUpdateCarriedAmmo;
+
 public:
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
-	
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	void GetAmmo(int32& OutCurrentMag, int32& OutCarriedAmmo);
 };
 

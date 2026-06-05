@@ -7,6 +7,7 @@
 #include "CommonDelegates.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBaseDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FIntDelegate, int32, IntValue);
 
 /**
  * 
