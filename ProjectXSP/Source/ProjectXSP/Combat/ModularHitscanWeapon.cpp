@@ -159,6 +159,7 @@ void AModularHitscanWeapon::CompleteReload()
 	CurrentMagazine = MagazineCapacity - overDrawn;
 
 	OnReloadComplete.Broadcast();
+	IsReloading = false;
 }
 
 bool AModularHitscanWeapon::NeedsReload()
@@ -180,6 +181,8 @@ void AModularHitscanWeapon::TryReload()
 	
 	GetWorldTimerManager().SetTimer(ReloadTimerHandle, FTimerDelegate::CreateWeakLambda(this, [this]()
 	{
+		
+		IsReloading = true;
 		OnReloadStart.Broadcast();
 	}), 0.1f, false);
 }
