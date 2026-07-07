@@ -47,9 +47,13 @@ class AProjectXSPCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> FireAction;
 
-	/** Move Input Action */
+	/** Reload Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> ReloadAction;
+
+	/** Pause Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> PauseAction;
 	
 public:
 	AProjectXSPCharacter();
@@ -73,6 +77,8 @@ protected:
 	void Fire(const FInputActionValue& Value);
 
 	void Reload(const FInputActionValue& Value);
+
+	void Pause(const FInputActionValue& Value);
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 	// End of APawn interface

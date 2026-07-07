@@ -2,6 +2,8 @@
 
 #include "ProjectXSPCharacter.h"
 
+#include "ProjectXSPGameMode.h"
+
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 //////////////////////////////////////////////////////////////////////////
@@ -63,6 +65,7 @@ void AProjectXSPCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &AProjectXSPCharacter::Fire);
 		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &AProjectXSPCharacter::Reload);
+		EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Triggered, this, &AProjectXSPCharacter::Pause);
 	}
 	else
 	{
@@ -123,4 +126,11 @@ void AProjectXSPCharacter::Reload(const FInputActionValue& Value)
 			weapon->TryReload();
 		}
 	}
+}
+
+void AProjectXSPCharacter::Pause(const FInputActionValue& Value)
+{
+	TObjectPtr<AProjectXSPGameMode> gm = GetWorld()->GetAuthGameMode<AProjectXSPGameMode>();
+
+	gm->InvertPausedState();
 }

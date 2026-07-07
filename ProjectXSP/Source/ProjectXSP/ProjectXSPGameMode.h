@@ -67,6 +67,15 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void RequestSwapAnimation();
+	
+	UFUNCTION(BlueprintCallable)
+	void InvertPausedState();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnPaused();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnUnpaused();
 
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FTransitionEffectUpdate OnTransitionEffectUpdate;

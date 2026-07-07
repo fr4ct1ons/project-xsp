@@ -2,6 +2,8 @@
 
 #include "ProjectXSPGameMode.h"
 
+#include "ProjectXSPPlayerController.h"
+
 AProjectXSPGameMode::AProjectXSPGameMode()
 	: Super()
 {
@@ -49,4 +51,23 @@ float AProjectXSPGameMode::GetScreenPercentage() const
 	multiplier = currentRes / static_cast<float>(DesiredHeight);
 
 	return (1/multiplier) * 100.0f;
+}
+
+void AProjectXSPGameMode::InvertPausedState()
+{
+	TObjectPtr<AProjectXSPPlayerController> pc = Cast<AProjectXSPPlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
+
+	if (!pc->IsPaused())
+	{
+		pc->SetInputMode(FInputModeGameAndUI());
+		pc->SetPause(true);
+		pc->SetShowMouseCursor(true);
+		OnPaused();
+	}
+	else
+	{
+		pc->SetInputMode(FInputModeGameOnly());
+		pc->SetShowMouseCursor(false);
+		OnUnpaused();
+	}
 }
