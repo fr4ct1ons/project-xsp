@@ -3,6 +3,9 @@
 #include "ProjectXSPGameMode.h"
 
 #include "ProjectXSPPlayerController.h"
+#include "UserSettingsXSP.h"
+#include "Kismet/KismetInternationalizationLibrary.h"
+#include "Kismet/KismetStringLibrary.h"
 
 AProjectXSPGameMode::AProjectXSPGameMode()
 	: Super()
@@ -14,8 +17,17 @@ AProjectXSPGameMode::AProjectXSPGameMode()
 
 void AProjectXSPGameMode::BeginPlay()
 {
+	TObjectPtr<UUserSettingsXSP> userSettings = UUserSettingsXSP::GetUserSettingsXSP();
+	UKismetInternationalizationLibrary::SetCurrentCulture(userSettings->GetCurrentCulture());
 	Player = static_cast<AProjectXSPCharacter*>(UGameplayStatics::GetActorOfClass(GetWorld(), AProjectXSPCharacter::StaticClass()));
 	OthersidePreview = static_cast<AOthersidePreview*>(UGameplayStatics::GetActorOfClass(GetWorld(), AOthersidePreview::StaticClass()));
+
+	TObjectPtr<UUserSettingsXSP> settings = UUserSettingsXSP::GetUserSettingsXSP();
+	bRayTracedLightingEnabled = settings->GetDefaultStylingEnabled()? false : settings->GetRayTracedLightingEnabled();
+	bRayTracedReflectionsEnabled = settings->GetDefaultStylingEnabled()? false : settings->GetRayTracedReflectionsEnabled();
+	settings->RefreshRenderScale();
+	settings->RefreshAfterUpdatingRT();
+	settings->SetAntiAliasMethod(settings->GetAntiAliasMethod());
 	Super::BeginPlay();
 }
 
@@ -39,11 +51,18 @@ void AProjectXSPGameMode::RequestSwapAnimation()
 
 float AProjectXSPGameMode::GetScreenPercentage() const
 {
+	TObjectPtr<UUserSettingsXSP> settings = UUserSettingsXSP::GetUserSettingsXSP();
+
+	if (!settings->GetDefaultStylingEnabled())
+	{
+		return settings->GetRenderScale();
+	}
+	
 	FVector2D Result = FVector2D( 1, 1 );
 	float currentRes = GSystemResolution.ResY;
 	float multiplier = 1.0f;
 
-	if(RayTracingEnabled)
+	if(bRayTracedLightingEnabled)
 	{
 		return 75.0f;
 	}

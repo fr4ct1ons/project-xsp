@@ -29,8 +29,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 DesiredHeight = 360;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool RayTracingEnabled = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bRayTracedLightingEnabled = false;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bRayTracedReflectionsEnabled = false;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	bool IsNewWorld = true;
@@ -76,6 +79,12 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnUnpaused();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnUpdateRTLighting(bool enabled);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnUpdateRTReflections(bool enabled);
 
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FTransitionEffectUpdate OnTransitionEffectUpdate;
