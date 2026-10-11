@@ -15,6 +15,7 @@
 #include "InputActionValue.h"
 #include "CommonDelegates.h"
 #include "Combat/ModularHitscanWeapon.h"
+#include "Core/Subsystems/PlayerHUDSubsystem.h"
 #include "ProjectXSPCharacter.generated.h"
 
 class UInputComponent;
@@ -55,11 +56,15 @@ class AProjectXSPCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> PauseAction;
 	
+	TObjectPtr<UPlayerHUDSubsystem> HUD;
+	
 public:
 	AProjectXSPCharacter();
 
 protected:
 	virtual void BeginPlay();
+
+	virtual void Tick(float DeltaSeconds) override;
 
 public:
 		
@@ -68,6 +73,30 @@ public:
 	class UInputAction* LookAction;
 
 protected:
+
+	/////////////////////////////////////////////////////// Stamina
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	float MaxStamina = 100.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float CurrentStamina;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool StaminaRegenerating = true;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	float StaminaRegenRate = 3.0f;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	float StaminaRegenDelay = 2.0f;
+
+	FTimerHandle StaminaRegenTimer;
+
+	void OnStaminaRegenTimerEnd();
+
+	///////////////////////////////////////////////////////
+	
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
 
@@ -79,6 +108,11 @@ protected:
 	void Reload(const FInputActionValue& Value);
 
 	void Pause(const FInputActionValue& Value);
+
+	virtual void Jump() override;
+
+	void ResetStaminaRegen();
+	
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 	// End of APawn interface

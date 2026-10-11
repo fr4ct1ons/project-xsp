@@ -23,11 +23,13 @@ AProjectXSPCharacter::AProjectXSPCharacter()
 	HandR = CreateDefaultSubobject<USceneComponent>(TEXT("HandR"));
 	HandR->SetupAttachment(GetMesh(), TEXT("RightHandWeaponSocket"));
 
+	CurrentStamina = MaxStamina;
 }
 
 void AProjectXSPCharacter::BeginPlay()
 {
 	// Call the base class  
+	HUD = GetGameInstance()->GetSubsystem<UPlayerHUDSubsystem>();
 	Super::BeginPlay();
 
 	bool DefaultSet = false;
@@ -46,6 +48,18 @@ void AProjectXSPCharacter::BeginPlay()
 	}
 }
 
+void AProjectXSPCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (StaminaRegenerating && CurrentStamina < MaxStamina)
+	{
+		CurrentStamina += StaminaRegenRate * DeltaSeconds;
+		CurrentStamina = FMath::Clamp(CurrentStamina, 0.0f, MaxStamina);
+		HUD->OnStaminaUpdated.Broadcast(CurrentStamina, MaxStamina);
+	}
+}
+
 //////////////////////////////////////////////////////////////////////////// Input
 
 void AProjectXSPCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -54,7 +68,7 @@ void AProjectXSPCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AProjectXSPCharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
@@ -133,4 +147,43 @@ void AProjectXSPCharacter::Pause(const FInputActionValue& Value)
 	TObjectPtr<AProjectXSPGameMode> gm = GetWorld()->GetAuthGameMode<AProjectXSPGameMode>();
 
 	gm->InvertPausedState();
+}
+
+void AProjectXSPCharacter::Jump()
+{
+	if (!CanJump() || CurrentStamina < 10.0f)
+	{
+		return;
+	}
+	
+	CurrentStamina -= 10.f;
+	HUD->OnStaminaUpdated.Broadcast(CurrentStamina, MaxStamina);
+	
+	Super::Jump();
+	ResetStaminaRegen();
+}
+
+void AProjectXSPCharacter::ResetStaminaRegen()
+{
+	StaminaRegenerating = false;
+
+	FTimerHandle unusedTimer;
+	
+	if (GetWorldTimerManager().TimerExists(StaminaRegenTimer))
+	{
+		GetWorldTimerManager().ClearTimer(StaminaRegenTimer);
+	}
+	
+	GetWorldTimerManager().SetTimer(unusedTimer, this, &AProjectXSPCharacter::OnStaminaRegenTimerEnd, StaminaRegenDelay);
+
+	StaminaRegenTimer = unusedTimer;
+
+	GEngine->AddOnScreenDebugMessage(0, 55.f, FColor::Red, TEXT("Stamina Regen is now OFF!"));
+	
+}
+
+void AProjectXSPCharacter::OnStaminaRegenTimerEnd()
+{
+	StaminaRegenerating = true;
+	GEngine->AddOnScreenDebugMessage(-1, 55.f, FColor::Green, TEXT("Stamina Regen is now ON!"));
 }
