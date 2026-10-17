@@ -14,6 +14,9 @@ ASceneLight::ASceneLight()
 	
 	LightFrame = CreateDefaultSubobject<UStaticMeshComponent>("LightFrame");
 	LightFrame->SetupAttachment(RootComponent);
+
+	TimeTracker = CreateDefaultSubobject<UDynamicTimeActorTracker>("TimeTracker"); 
+	TimeTracker->PastChanged.BindDynamic(this, &ASceneLight::OnPastChanged);
 }
 
 // Called when the game starts or when spawned
@@ -21,7 +24,7 @@ void ASceneLight::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (bIsFutureWorld == true)
+	if (!TimeTracker->IsFutureWorld())
 	{
 		if (bTurnOff)
 		{
@@ -32,6 +35,28 @@ void ASceneLight::BeginPlay()
 			LightComponent->SetIntensity(LightComponent->Intensity/2.f);
 		}
 	}
+}
+
+void ASceneLight::OnPastChanged(UDynamicTimeActorTracker* other)
+{
+	LightComponent->DestroyComponent();
+	LightBulb->DestroyComponent();
+	OnLightbulbDestroyed();
+}
+
+float ASceneLight::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
+	class AController* EventInstigator, AActor* DamageCauser)
+{
+	LightComponent->DestroyComponent();
+	LightBulb->DestroyComponent();
+	OnLightbulbDestroyed();
+
+	if (TimeTracker->IsFutureWorld())
+	{
+		TimeTracker->ChangePast();
+	}
+	
+	return DamageAmount;
 }
 
 // Called every frame

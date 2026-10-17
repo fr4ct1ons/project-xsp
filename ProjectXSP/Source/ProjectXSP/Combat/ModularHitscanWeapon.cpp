@@ -4,6 +4,7 @@
 #include "ModularHitscanWeapon.h"
 
 #include "Camera/CameraComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 void AModularHitscanWeapon::Interact()
 {
@@ -22,7 +23,7 @@ void AModularHitscanWeapon::Interact()
 	FHitResult HitResult;
 	
 	AProjectXSPCharacter* outPlayer = nullptr;
-	FVector OriginPoint;
+	FVector StartPoint;
 	FVector EndPoint;
 	
 	if(TryGetPlayerHolder(outPlayer))
@@ -30,9 +31,8 @@ void AModularHitscanWeapon::Interact()
 
 		if(outPlayer != nullptr)
 		{
-			OriginPoint = outPlayer->GetFirstPersonCameraComponent()->GetComponentLocation();
-			EndPoint = outPlayer->GetFirstPersonCameraComponent()->GetComponentLocation() +
-				(outPlayer->GetFirstPersonCameraComponent()->GetForwardVector() * Range);
+			StartPoint = outPlayer->GetFirstPersonCameraComponent()->GetComponentLocation();
+			EndPoint = StartPoint + (outPlayer->GetFirstPersonCameraComponent()->GetForwardVector() * Range);
 		}
 		else
 		{
@@ -42,11 +42,14 @@ void AModularHitscanWeapon::Interact()
 	}
 	else
 	{
-		OriginPoint = GetActorLocation();
+		StartPoint = GetActorLocation();
 		EndPoint = GetActorLocation() + (GetActorForwardVector() * Range);
 	}
 	
-	GetWorld()->LineTraceSingleByChannel(HitResult, OriginPoint, EndPoint * Range, ECC_Visibility );
+	GetWorld()->LineTraceSingleByChannel(HitResult, StartPoint, EndPoint, ECC_Visibility );
+
+	DrawDebugLine(GetWorld(), StartPoint, HitResult.Location, FColor::Red, true, 67.f, 0, 1.f);
+	DrawDebugLine(GetWorld(), StartPoint, EndPoint, FColor::Green, true, 67.f, 0, 1.f);
 
 	if (FMath::IsNearlyZero(ShootingCooldown))
 	{
@@ -70,6 +73,7 @@ void AModularHitscanWeapon::Interact()
 	if(HitResult.bBlockingHit)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, "Hit Point:" + HitResult.GetActor()->GetName());
+		UGameplayStatics::ApplyDamage(HitResult.GetActor(), 20.f, GetInstigatorController(), this, UDamageType::StaticClass());
 	}
 
 	Super::Interact();
