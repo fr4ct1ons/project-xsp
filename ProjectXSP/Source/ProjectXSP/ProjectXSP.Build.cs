@@ -10,6 +10,6 @@ public class ProjectXSP : ModuleRules
 
 		//PrivateDependencyModuleNames.AddRange(new string[] { "Blutility"});
 		
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG", "Blutility" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG", "UMGEditor", "Blutility", "UnrealEd" });
 	}
 }

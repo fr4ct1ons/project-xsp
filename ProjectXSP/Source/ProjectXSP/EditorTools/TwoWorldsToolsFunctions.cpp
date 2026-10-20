@@ -12,12 +12,12 @@ void UTwoWorldsToolsFunctions::TryConnectActors(AActor* FutureActor, AActor* Pas
 
 	if(IsValid(FutureActor->GetComponentByClass<UEditorUtilityStaticTimeTracker>()))
 	{
-		
+		return;
 	}
 
 	if(IsValid(PastActor->GetComponentByClass<UEditorUtilityStaticTimeTracker>()))
 	{
-		
+		return;
 	}
 
 	TObjectPtr<UEditorUtilityStaticTimeTracker> CompFuture = Cast<UEditorUtilityStaticTimeTracker>(FutureActor->AddComponentByClass(TrackerClass, false, FutureActor->GetTransform(), true));
