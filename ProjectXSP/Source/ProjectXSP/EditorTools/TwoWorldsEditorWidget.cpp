@@ -110,6 +110,11 @@ void UTwoWorldsEditorWidget::TryConnectActors(AActor* FutureActor, AActor* PastA
 
 	CompFuture->Modify();
 	CompPast->Modify();
+
+	FString temp = "TimeTrak_Other_" + PastActor->GetActorLabel();
+	CompFuture->Rename(*temp);
+	temp = "TimeTrak_Other_" + FutureActor->GetActorLabel();
+	CompPast->Rename(*temp);
 	
 	FutureActor->AddInstanceComponent(CompFuture);
 	PastActor->AddInstanceComponent(CompPast);
