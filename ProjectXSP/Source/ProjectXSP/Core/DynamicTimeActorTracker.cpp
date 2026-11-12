@@ -41,7 +41,7 @@ void UDynamicTimeActorTracker::TickComponent(float DeltaTime, ELevelTick TickTyp
 
 void UDynamicTimeActorTracker::ChangePast()
 {
-	if (bIsFutureWorld)
+	if (!bIsFutureWorld)
 	{
 		if (IsValid(LinkedOther))
 			LinkedOther->PastChanged.ExecuteIfBound(this);

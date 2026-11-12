@@ -36,7 +36,7 @@ protected:
 	TObjectPtr<UStaticMeshComponent> LightBulb;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TObjectPtr<ULightComponent> LightComponent;
+	TWeakObjectPtr<ULightComponent> LightComponent;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<UDynamicTimeActorTracker> TimeTracker;

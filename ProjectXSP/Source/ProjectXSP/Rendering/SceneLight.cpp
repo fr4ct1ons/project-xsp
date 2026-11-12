@@ -24,7 +24,7 @@ void ASceneLight::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (!TimeTracker->IsFutureWorld())
+	if (TimeTracker->IsFutureWorld())
 	{
 		if (bTurnOff)
 		{
@@ -51,7 +51,7 @@ float ASceneLight::TakeDamage(float DamageAmount, struct FDamageEvent const& Dam
 	LightBulb->DestroyComponent();
 	OnLightbulbDestroyed();
 
-	if (TimeTracker->IsFutureWorld())
+	if (!TimeTracker->IsFutureWorld())
 	{
 		TimeTracker->ChangePast();
 	}
